@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body, body[data-color-scheme='light'] {
+        --foreground-rgb: 0, 0, 0;
+        --background-start-rgb: 214, 219, 220;
+        --background-end-rgb: 255, 255, 255;
+        --base-text: rgb(255, 255, 255);
+    }
+
+    body[data-color-scheme='dark'] {
+        --foreground-rgb: 255, 255, 255;
+        --background-start-rgb: 0, 0, 0;
+        --background-end-rgb: 0, 0, 0;
+        --base-text: rgb(0, 5, 26);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        body {
+            --foreground-rgb: 255, 255, 255;
+            --background-start-rgb: 0, 0, 0;
+            --background-end-rgb: 0, 0, 0;
+            --base-text: rgb(255, 255, 255);
+        }
+
+        #theme-toggle .theme-toggle--light {
+            display: block;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        #theme-toggle .theme-toggle--dark {
+            display: block;
+        }
+    }
+
+
+    body {
+        color: rgb(var(--foreground-rgb));
+        background: linear-gradient(
+                to bottom,
+                transparent,
+                rgb(var(--background-end-rgb))
+        ) rgb(var(--background-start-rgb));
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        line-height: 2rem;
+    }
+
+    a {
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    select, select > option {
+        color: black
+    }
+}
+
+#theme-toggle {
+    position: relative;
+    display: block;
+    height: 40px;
+    width: 60px;
+    overflow: hidden;
+}
+
+#theme-toggle button
+{
+    letter-spacing: -2px;
+    position: absolute;
+    animation: none;
+    display: none;
+    left: 0;
+    right: 0;
+}
+
+@keyframes distance {
+    0% {
+        offset-distance: 0;
+    }
+
+    100% {
+        offset-distance: 100%;
+    }
+}
+
+/* Rise */
+[data-color-scheme='dark'] #theme-toggle .theme-toggle--light,
+[data-color-scheme='light'] #theme-toggle .theme-toggle--dark {
+    animation: distance 1000ms linear 1 forwards;
+    offset-path: path('M 30,70 C 10,70 5,10 30,10 M 30,10');
+    offset-rotate: 0deg;
+    display: block;
+}
+
+/* Set */
+[data-color-scheme='dark'] #theme-toggle .theme-toggle--dark,
+[data-color-scheme='light'] #theme-toggle .theme-toggle--light {
+    animation: distance 1000ms linear 1 forwards;
+    offset-path: path('M 30,10 C 60,10 60,70 30,70 M 30,70');
+    offset-rotate: 0deg;
+    display: block;
+}
