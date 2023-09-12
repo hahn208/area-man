@@ -9,7 +9,7 @@ export default function Footer() {
                         <Link href={'https://github.com/hahn208/'} rel={'external'}>Andrew Hahn</Link>
                     </li>
                     <li>
-                        <Link href={'./?modal=modal-about'}>About</Link>
+                        <Link href={{ pathname: '/', query: { modal: 'modal-about'}}}>About</Link>
                     </li>
                     <li>
                         <>Terms &amp; Conditions</>
