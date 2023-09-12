@@ -5,7 +5,6 @@ export default function Header() {
         <header>
             <nav>
                 <ul>
-                    <li className={'text-center'}>nav</li>
                     <li>
                         <ThemeToggle></ThemeToggle>
                     </li>

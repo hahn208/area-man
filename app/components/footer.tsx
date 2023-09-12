@@ -6,16 +6,16 @@ export default function Footer() {
             <nav>
                 <ul className={'flex flex-inline gap-4'}>
                     <li>
-                        <Link href={'https://www.linkedin.com/in/208hahn'} rel={'external'}>Andrew Hahn</Link>
+                        <Link href={'https://github.com/hahn208/'} rel={'external'}>Andrew Hahn</Link>
                     </li>
                     <li>
-                        <Link href={'./about'}>About</Link>
+                        <Link href={'./?modal=modal-about'}>About</Link>
                     </li>
                     <li>
-                        Terms & Conditions
+                        <>Terms &amp; Conditions</>
                     </li>
                 </ul>
             </nav>
         </footer>
-    )
+    );
 }
