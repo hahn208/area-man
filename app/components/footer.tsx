@@ -1,18 +1,20 @@
-import Link from "next/link";
+'use server'
 
-export default function Footer() {
+import Link from 'next/link';
+
+export default async function Footer() {
     return (
         <footer>
             <nav>
                 <ul className={'flex flex-inline gap-4'}>
                     <li>
-                        <Link href={'https://github.com/hahn208/'} rel={'external'}>Andrew Hahn</Link>
+                        <Link href={'https://github.com/hahn208/'} target={'_blank'} rel={'external'}>Andrew Hahn</Link>
                     </li>
                     <li>
                         <Link href={{ pathname: '/', query: { modal: 'modal-about'}}}>About</Link>
                     </li>
                     <li>
-                        <>Terms &amp; Conditions</>
+                        <Link href={{ pathname: '/', query: { modal: 'modal-terms'}}}>Terms &amp; Conditions</Link>
                     </li>
                 </ul>
             </nav>

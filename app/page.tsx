@@ -1,10 +1,13 @@
+'use server'
+
 import DateInput from "@/app/components/date-input";
 import ModalAbout from "@/app/components/modal-about";
 
-interface searchParams { [key: string]: string | string[] | undefined }
+interface searchParams {
+    [key: string]: string | string[] | undefined
+}
 
-export default function Page({ searchParams }: { searchParams: searchParams })
-{
+export default async function Page({searchParams}: {searchParams: searchParams}) {
     return (
         <>
             <main className="flex flex-col items-center text-center pb-40">
@@ -14,8 +17,9 @@ export default function Page({ searchParams }: { searchParams: searchParams })
                     <DateInput></DateInput>
                 </section>
             </main>
-            {/* Modal based content is loaded via URL param instead of with state or useRouter to avoid client rendering. */}
-            { !!searchParams && searchParams.modal === 'modal-about' && <ModalAbout></ModalAbout> }
+            {/* Modal-based page content is loaded via URL param instead of with state or useRouter to avoid client rendering. */}
+            {/* TODO: make use of portals */}
+            {!!searchParams && searchParams.modal === 'modal-about' && <ModalAbout></ModalAbout>}
         </>
     );
 }

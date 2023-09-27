@@ -1,12 +1,33 @@
 'use client'
 
-import React, {FormEvent, useState} from "react";
+import { ChangeEvent, useState } from 'react';
+// @ts-ignore
+import { experimental_useFormState as useFormState, experimental_useFormStatus as useFormStatus } from 'react-dom'
+import { fetchMan } from '@/app/actions/area-man';
+import Modal from '@/app/components/modal';
+import ModalClose from "@/app/components/modal-close";
+
+const initialFormState = {
+    title: null,
+    response: null,
+};
+
+const SubmitButton = () => {
+    const { pending } = useFormStatus();
+
+    return (
+        <button className={'rounded-md p-2 m-2 bg-white text-black leading-none'} type='submit' aria-disabled={pending}>&gt;</button>
+    )
+};
 
 /**
  * Note: Not currently implementing a defaultValue for the selector since this is an SPA, but if a link is shared
  *  it would need to be added.
  */
 export default function DateInput() {
+    const [amFormState, formAction] = useFormState(fetchMan, initialFormState);
+    const [isModalOpen, setModalOpen] = useState(true);
+
     const [month, setMonth] = useState(''),
         [day, setDay] = useState('');
 
@@ -24,7 +45,7 @@ export default function DateInput() {
     const selectMonthOptions = {
         className: 'rounded-md p-2 m-2',
         id: 'dateMonth',
-        onChange: (_e: React.ChangeEvent) => setMonth((_e.target as HTMLSelectElement).value),
+        onChange: (_e: ChangeEvent) => setMonth((_e.target as HTMLSelectElement).value),
         name: 'dateMonth',
         placeholder: 'Choose Month',
         required: true,
@@ -34,7 +55,7 @@ export default function DateInput() {
     const selectDayOptions = {
         className: 'rounded-md p-2 m-2',
         id: 'dateMonth',
-        onChange: (_e: React.ChangeEvent) => setDay((_e.target as HTMLSelectElement).value),
+        onChange: (_e: ChangeEvent) => setDay((_e.target as HTMLSelectElement).value),
         name: 'dateDay',
         placeholder: 'Choose Day',
         required: true,
@@ -42,10 +63,18 @@ export default function DateInput() {
     };
     
     return (
-        <form>
+        <form action={formAction}>
+            {/* TODO: this doesn't re-open */}
+            {isModalOpen && amFormState?.title &&
+                <Modal>
+                    <a onClick={() => { return setModalOpen(false); }}><ModalClose /></a>
+                    <h1>{amFormState?.title}</h1>
+                    <p>{amFormState?.response}</p>
+                </Modal>
+            }
             <select {...selectMonthOptions}>{monthOptions}</select>
             <select {...selectDayOptions}>{dayOptions}</select>
-            <button className={'rounded-md p-2 m-2 bg-white text-black leading-none'}>&gt;</button>
+            <SubmitButton></SubmitButton>
         </form>
     )
-}
+};
