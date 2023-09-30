@@ -62,6 +62,8 @@ export default function DateInput() {
         value: day,
     };
     
+    // TODO: Suspense & UseOptimistic
+    
     return (
         <form action={formAction}>
             {/* TODO: this doesn't re-open */}
