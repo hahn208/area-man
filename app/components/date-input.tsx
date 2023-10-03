@@ -14,9 +14,9 @@ const initialFormState = {
 
 const SubmitButton = () => {
     const { pending } = useFormStatus();
-
+    
     return (
-        <button className={'rounded-md p-2 m-2 bg-white text-black leading-none'} type='submit' aria-disabled={pending}>&gt;</button>
+        <button className={'rounded-md p-2 m-2 bg-white text-black leading-none disabled'} type='submit' aria-disabled={pending}>&gt;</button>
     )
 };
 
