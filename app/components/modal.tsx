@@ -1,6 +1,6 @@
 import {ReactNode} from 'react';
 
-export default async function Modal({children}: {children: ReactNode})
+export default function Modal({children}: {children: ReactNode})
 {
     return(
         /* The modal will be half the screen height. By default, there is a drop shadow, on dark mode an inner shadow. */

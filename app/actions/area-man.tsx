@@ -1,6 +1,6 @@
 'use server'
 
-//import { revalidatePath } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 import OpenAI from 'openai';
 
 const openai = new OpenAI();
@@ -13,7 +13,7 @@ export async function fetchMan (prevState: any, formData: FormData)
         messages: [
             {
                 role: 'user',
-                content: process.env.OPENAI_PROMPT || "Grüezi" // TODO: Check on build that the env variables are in place.
+                content: process.env.OPENAI_PROMPT?.replace("\r\n", '<br>').replace('[DATE]', `${formData.get('dateMonth')} ${formData.get('dateDay')}`) || "Please say 'Hello World' in 5 different languages."
             }
         ],
         model: 'gpt-3.5-turbo',
@@ -29,7 +29,7 @@ export async function fetchMan (prevState: any, formData: FormData)
     //*/
 
     // TODO: Test caching
-    //revalidatePath('/');
+    revalidatePath('/');
 
     return {
         title: `On ${formData.get('dateMonth')} ${formData.get('dateDay')} area man be like--`,

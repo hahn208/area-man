@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, useState } from 'react';
+import {ChangeEvent, Suspense, useState} from 'react';
 // @ts-ignore
 import { experimental_useFormState as useFormState, experimental_useFormStatus as useFormStatus } from 'react-dom'
 import { fetchMan } from '@/app/actions/area-man';
@@ -16,7 +16,7 @@ const SubmitButton = () => {
     const { pending } = useFormStatus();
     
     return (
-        <button className={'rounded-md p-2 m-2 bg-white text-black leading-none disabled'} type='submit' aria-disabled={pending}>&gt;</button>
+        <button className={'rounded-md p-2 m-2 bg-white text-black leading-none disabled cursor-not-allowed'} type='submit' aria-disabled={pending}>LFG</button>
     )
 };
 
@@ -26,7 +26,7 @@ const SubmitButton = () => {
  */
 export default function DateInput() {
     const [amFormState, formAction] = useFormState(fetchMan, initialFormState);
-    const [isModalOpen, setModalOpen] = useState(true);
+    const [isModalOpen, setModalOpen] = useState(false);
 
     const [month, setMonth] = useState(''),
         [day, setDay] = useState('');
@@ -65,18 +65,19 @@ export default function DateInput() {
     // TODO: Suspense & UseOptimistic
     
     return (
-        <form action={formAction}>
-            {/* TODO: this doesn't re-open */}
-            {isModalOpen && amFormState?.title &&
-                <Modal>
-                    <a onClick={() => { return setModalOpen(false); }}><ModalClose /></a>
-                    <h1>{amFormState?.title}</h1>
-                    <p>{amFormState?.response}</p>
-                </Modal>
+        <form action={formAction} onSubmit={() => { setModalOpen(true); }}>
+            {isModalOpen &&
+                <Suspense fallback={<>loading</>}>
+                    <Modal>
+                        <a onClick={() => { return setModalOpen(false); }}><ModalClose /></a>
+                        <h1>{amFormState?.title}</h1>
+                        <p>{amFormState?.response}</p>
+                    </Modal>
+                </Suspense>
             }
             <select {...selectMonthOptions}>{monthOptions}</select>
             <select {...selectDayOptions}>{dayOptions}</select>
-            <SubmitButton></SubmitButton>
+            <button className={'rounded-md p-2 m-2 bg-white text-black leading-none disabled'} type='submit'>LFG</button>
         </form>
     )
 };
