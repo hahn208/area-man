@@ -3,6 +3,7 @@
 import Alert from "@/app/components/alert";
 import DateInput from "@/app/components/date-input";
 import ModalAbout from "@/app/components/modal-about";
+import ModalTerms from "@/app/components/modal-terms";
 
 interface searchParams {
     [key: string]: string | string[] | undefined
@@ -27,6 +28,7 @@ export default async function Page({searchParams}: {searchParams: searchParams})
             {/* Modal-based page content is loaded via URL param instead of with state or useRouter to avoid client rendering. */}
             {/* TODO: make use of portals */}
             {!!searchParams && searchParams.modal === 'modal-about' && <ModalAbout></ModalAbout>}
+            {!!searchParams && searchParams.modal === 'modal-terms' && <ModalTerms></ModalTerms>}
         </>
     );
 }

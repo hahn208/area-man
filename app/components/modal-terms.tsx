@@ -5,9 +5,9 @@ import ModalClose from "@/app/components/modal-close";
 export default () => {
     return(
         <Modal>
-            <Link href={'/'}><ModalClose /></Link>
+            <Link href={'/'} className={'modal-close'}><ModalClose /></Link>
             <h1>Terms! Conditions!</h1>
-            <p>This project stores no data directly. All data stored by third parties (ChatGPT)</p>
+            <p>This project stores no data directly. All data stored by third parties (eg ChatGPT) is not the responsibility of this site.</p>
         </Modal>
     );
 }

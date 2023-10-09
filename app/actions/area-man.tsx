@@ -13,7 +13,7 @@ export async function fetchMan (prevState: any, formData: FormData)
         messages: [
             {
                 role: 'user',
-                content: process.env.OPENAI_PROMPT?.replace("\r\n", '<br>').replace('[DATE]', `${formData.get('dateMonth')} ${formData.get('dateDay')}`) || "Please say 'Hello World' in 5 different languages."
+                content: process.env.OPENAI_PROMPT?.replace('[DATE]', `${formData.get('dateMonth')} ${formData.get('dateDay')}`) || "Please say 'Hello World' in 5 different languages."
             }
         ],
         model: 'gpt-3.5-turbo',
@@ -25,10 +25,10 @@ export async function fetchMan (prevState: any, formData: FormData)
     const chatCompletion: OpenAI.Chat.ChatCompletion = await openai.chat.completions.create(params);
     /*/
     // @ts-ignore
-    const chatCompletion: OpenAI.Chat.ChatCompletion = { choices: [{ message: { role: 'user', content: 'done.' } }] }
+    const chatCompletion: OpenAI.Chat.ChatCompletion = { choices: [{ message: { role: 'user', content: 'done.\n\ndone.' } }] }
     //*/
 
-    // TODO: Test caching
+    // Bust cache.
     revalidatePath('/');
 
     return {

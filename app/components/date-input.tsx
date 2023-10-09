@@ -1,11 +1,12 @@
 'use client'
 
-import {ChangeEvent, Suspense, useState} from 'react';
+import {ChangeEvent, useState} from 'react';
 // @ts-ignore
-import { experimental_useFormState as useFormState, experimental_useFormStatus as useFormStatus } from 'react-dom'
+import { experimental_useFormState as useFormState, experimental_useFormStatus as useFormStatus, Text } from 'react-dom'
 import { fetchMan } from '@/app/actions/area-man';
 import Modal from '@/app/components/modal';
 import ModalClose from "@/app/components/modal-close";
+import {clsx} from "clsx";
 
 const initialFormState = {
     title: null,
@@ -13,10 +14,10 @@ const initialFormState = {
 };
 
 const SubmitButton = () => {
-    const { pending } = useFormStatus();
+    const {pending} = useFormStatus();
     
     return (
-        <button className={'rounded-md p-2 m-2 bg-white text-black leading-none disabled cursor-not-allowed'} type='submit' aria-disabled={pending}>LFG</button>
+        <button className={clsx('rounded-md text-xl font-extrabold p-2 m-2 bg-white text-black leading-none', pending ?? 'disabled cursor-not-allowed')} type='submit' aria-disabled={pending}>&raquo;</button>
     )
 };
 
@@ -62,22 +63,25 @@ export default function DateInput() {
         value: day,
     };
     
-    // TODO: Suspense & UseOptimistic
+    const modalContent = !amFormState.title ? <p>Loading...</p> : <><h1>{amFormState?.title}</h1><p className={'pr-6 text-left whitespace-pre-wrap'}>{amFormState?.response}</p></>;
     
     return (
         <form action={formAction} onSubmit={() => { setModalOpen(true); }}>
             {isModalOpen &&
-                <Suspense fallback={<>loading</>}>
-                    <Modal>
-                        <a onClick={() => { return setModalOpen(false); }}><ModalClose /></a>
-                        <h1>{amFormState?.title}</h1>
-                        <p>{amFormState?.response}</p>
-                    </Modal>
-                </Suspense>
+                <Modal>
+                    <a className={'modal-close'} onClick={() => { return setModalOpen(false); }}><ModalClose /></a>
+                    {modalContent}                    
+                </Modal>
             }
-            <select {...selectMonthOptions}>{monthOptions}</select>
-            <select {...selectDayOptions}>{dayOptions}</select>
-            <button className={'rounded-md p-2 m-2 bg-white text-black leading-none disabled'} type='submit'>LFG</button>
+            <select {...selectMonthOptions}>
+                <option value="">&lt;Month&gt;</option>
+                {monthOptions}
+            </select>
+            <select {...selectDayOptions}>
+                <option value="">&lt;Day&gt;</option>
+                {dayOptions}
+            </select>
+            <SubmitButton></SubmitButton>
         </form>
     )
 };
