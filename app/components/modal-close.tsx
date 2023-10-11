@@ -1,4 +1,4 @@
-export default () => {
+export default function ModalClose() {
     return (
         <div className={'py-2 px-4'}>
             <span className="sr-only">Close modal</span>

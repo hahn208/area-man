@@ -2,7 +2,7 @@ import Modal from "@/app/components/modal";
 import Link from "next/link";
 import ModalClose from "@/app/components/modal-close";
 
-export default () => {
+export default function ModalTerms() {
     return(
         <Modal>
             <Link href={'/'} className={'modal-close'}><ModalClose /></Link>
