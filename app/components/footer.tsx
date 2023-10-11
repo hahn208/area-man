@@ -8,7 +8,7 @@ export default async function Footer() {
             <nav>
                 <ul className={'flex flex-inline gap-4'}>
                     <li>
-                        <Link href={'https://github.com/hahn208/'} target={'_blank'} rel={'external'}>Andrew Hahn</Link>
+                        <Link href={'https://github.com/hahn208/'} target={'_blank'} rel={'external'} className={'cursor-alias'}>Andrew Hahn</Link>
                     </li>
                     <li>
                         <Link href={{ pathname: '/', query: { modal: 'modal-about'}}}>About</Link>

@@ -1,0 +1,104 @@
+.loadingSnake {
+    position: relative;
+    display: block;
+    height: 25px;
+    width: 25px;
+    overflow: hidden;
+    justify-self: center;
+    align-self: center;
+}
+
+.loadingSnake > div {
+    display: block;
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background-color: #000;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: steps(1, end);
+}
+
+.dot-two {
+    opacity: 0.3;
+}
+
+.loadingSnake > .dot-row-t {
+    animation-name: dot-march-t;
+    left: 0;
+}
+
+.loadingSnake .dot-row-t.dot-two {
+    left: -5px;
+}
+
+.loadingSnake > .dot-row-r {
+    animation-name: dot-march-r;
+    top: -5px;
+    right: 0;
+}
+
+.loadingSnake .dot-row-r.dot-two {
+    top: -10px;
+}
+
+.loadingSnake > .dot-row-b {
+    animation-name: dot-march-b;
+    right: 0;
+    bottom: 0;
+}
+
+.loadingSnake .dot-row-b.dot-two {
+    right: -5px;
+}
+
+.loadingSnake > .dot-row-l {
+    animation-name: dot-march-l;
+    bottom: -5px;
+}
+
+.loadingSnake .dot-row-l.dot-two {
+    bottom: -10px;
+}
+
+@keyframes dot-march-t {
+    0% { transform: translateX(0px); }
+    10% { transform: translateX(5px); }
+    20% { transform: translateX(10px); }
+    30% { transform: translateX(15px); }
+    40% { transform: translateX(20px); }
+    50% { transform: translateX(25px); }
+    60% { transform: translateX(30px); }
+    61% { transform: translateX(35px); }
+}
+
+@keyframes dot-march-r {
+    0% { transform: translateY(-5px); }
+    50% { transform: translateY(10px); }
+    60% { transform: translateY(15px); }
+    70% { transform: translateY(20px); }
+    80% { transform: translateY(25px); }
+    90% { transform: translateY(30px); }
+    100% { transform: translateY(35px); }
+}
+
+@keyframes dot-march-b {
+    0% { transform: translateX(0); }
+    10% { transform: translateX(-5px); }
+    20% { transform: translateX(-10px); }
+    30% { transform: translateX(-15px); }
+    40% { transform: translateX(-20px); }
+    50% { transform: translateX(-25px); }
+    60% { transform: translateX(-30px); }
+    61% { transform: translateX(-35px); }
+}
+
+@keyframes dot-march-l {
+    0% { transform: translateY(5px); }
+    50% { transform: translateY(-10px); }
+    60% { transform: translateY(-15px); }
+    70% { transform: translateY(-20px); }
+    80% { transform: translateY(-25px); }
+    90% { transform: translateY(-30px); }
+    100% { transform: translateY(-35px); }
+}

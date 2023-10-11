@@ -110,6 +110,15 @@
     display: block;
 }
 
+.modal h1 {
+    padding-top: 1rem;
+}
+
+.modal p {
+    padding-right: 2rem;
+    padding-bottom: 2rem;
+}
+
 .modal-close {
     position: sticky;
     display: block;

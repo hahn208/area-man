@@ -4,6 +4,7 @@ import {ChangeEvent, useState} from 'react';
 // @ts-ignore
 import { experimental_useFormState as useFormState, experimental_useFormStatus as useFormStatus, Text } from 'react-dom'
 import { fetchMan } from '@/app/actions/area-man';
+import LoadingSnake from "@/app/components/loading-snake";
 import Modal from '@/app/components/modal';
 import ModalClose from "@/app/components/modal-close";
 import {clsx} from "clsx";
@@ -11,6 +12,7 @@ import {clsx} from "clsx";
 const initialFormState = {
     title: null,
     response: null,
+    date: null,
 };
 
 const SubmitButton = () => {
@@ -63,14 +65,17 @@ export default function DateInput() {
         value: day,
     };
     
-    const modalContent = !amFormState.title ? <p>Loading...</p> : <><h1>{amFormState?.title}</h1><p className={'pr-6 text-left whitespace-pre-wrap'}>{amFormState?.response}</p></>;
+    const modalContentLoading = <div className={'flex flex-col h-1/2 w-full gap-2 justify-center align-middle'}><span>Loading!</span><LoadingSnake /></div>;
+
+    // Ew. Need a better way of checking for a loading state.    
+    const modalContent = amFormState?.date !== `${month}${day}` ? modalContentLoading : <><h1>{amFormState?.title}</h1><p className={'text-left whitespace-pre-wrap'}>{amFormState?.response}</p></>;
     
     return (
         <form action={formAction} onSubmit={() => { setModalOpen(true); }}>
             {isModalOpen &&
                 <Modal>
                     <a className={'modal-close'} onClick={() => { return setModalOpen(false); }}><ModalClose /></a>
-                    {modalContent}                    
+                    {modalContent}
                 </Modal>
             }
             <select {...selectMonthOptions}>

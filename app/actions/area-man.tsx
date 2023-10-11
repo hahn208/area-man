@@ -8,6 +8,9 @@ const openai = new OpenAI();
 export async function fetchMan (prevState: any, formData: FormData)
 {
     'use server'
+
+    // Bust cache.
+    revalidatePath('/');
     
     const params: OpenAI.Chat.ChatCompletionCreateParams = {
         messages: [
@@ -28,11 +31,9 @@ export async function fetchMan (prevState: any, formData: FormData)
     const chatCompletion: OpenAI.Chat.ChatCompletion = { choices: [{ message: { role: 'user', content: 'done.\n\ndone.' } }] }
     //*/
 
-    // Bust cache.
-    revalidatePath('/');
-
     return {
         title: `On ${formData.get('dateMonth')} ${formData.get('dateDay')} area man be like--`,
         response: chatCompletion.choices[0].message.content,
+        date: `${formData.get('dateMonth')}${formData.get('dateDay')}`
     }
 }
