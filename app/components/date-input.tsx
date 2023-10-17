@@ -1,18 +1,14 @@
 'use client'
 
-import {ChangeEvent, FormEvent, FormEventHandler, useState} from 'react';
-import {useParams, useRouter} from "next/navigation";
-
+import {ChangeEvent, FormEvent, FormEventHandler} from 'react';
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import Link from "next/link";
+import OpenAI from 'openai';
 
 import LoadingSnake from "@/app/components/loading-snake";
 import Modal from '@/app/components/modal';
 import ModalClose from "@/app/components/modal-close";
 
-const initialFormState = {
-    title: null,
-    response: null,
-    date: null,
-};
 
 const SubmitButton = () => {
     return (
@@ -24,15 +20,14 @@ const SubmitButton = () => {
  * Note: Not currently implementing a defaultValue for the selector since this is an SPA, but if a link is shared
  *  it would need to be added.
  */
-export default function DateInput() {
-    const [isModalOpen, setModalOpen] = useState(false);
-
+export default async function DateInput() {
+    //const [isModalOpen, setModalOpen] = useState(false);
+    const openai = new OpenAI();
     const router = useRouter();
-    const params = useParams();
-    
-    const [month, setMonth] = useState(''),
-        [day, setDay] = useState('');
 
+    /*const [month, setMonth] = useState(''),
+        [day, setDay] = useState('');
+*/
     const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     
     // Convert a number into a zero-prefixed string. eg 1 => '01'.
@@ -47,43 +42,50 @@ export default function DateInput() {
     const selectMonthOptions = {
         className: 'rounded-md p-2 m-2',
         id: 'dateMonth',
-        onChange: (_e: ChangeEvent) => setMonth((_e.target as HTMLSelectElement).value),
+        /*onChange: (_e: ChangeEvent) => setMonth((_e.target as HTMLSelectElement).value),*/
         name: 'dateMonth',
         placeholder: 'Choose Month',
         required: true,
-        value: month,
     };
 
     const selectDayOptions = {
         className: 'rounded-md p-2 m-2',
         id: 'dateDay',
-        onChange: (_e: ChangeEvent) => setDay((_e.target as HTMLSelectElement).value),
+        /*onChange: (_e: ChangeEvent) => setDay((_e.target as HTMLSelectElement).value),*/
         name: 'dateDay',
         placeholder: 'Choose Day',
         required: true,
-        value: day,
     };
+
+    const searchParams = useSearchParams()
     
     const formHandler = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         
         const formData = new FormData(event.target as HTMLFormElement);
         
-        setModalOpen(true);
+        //setModalOpen(true);
         void router.push(`/?${new URLSearchParams([...formData.entries()] as string[][]).toString()}`);
     };
     
-    console.log(params); // This isn't working.
-    
     const modalContentLoading = <div className={'flex flex-col h-1/2 w-full gap-2 justify-center align-middle'}><span>Loading!</span><LoadingSnake /><br /><small>(ChatGPT takes ~30 seconds)</small></div>;
     
-    const modalContent = null !== `${month}${day}` ? modalContentLoading : <><h1>{'f'}</h1><p className={'text-left whitespace-pre-wrap'}>{'f'}</p></>;
+    const modalContent = (!searchParams.get('dateMonth')) ? modalContentLoading : <><h1>{'f'}</h1><p className={'text-left whitespace-pre-wrap'}>{'f'}</p></>;
+
+/*    const stream = await openai.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: "Please say 'Hello World' in 5 different languages." }],
+        stream: true,
+    });
+    for await (const part of stream) {
+        process.stdout.write(part.choices[0]?.delta?.content || '');
+    }*/
     
     return (
         <form onSubmit={formHandler}>
-            {isModalOpen &&
+            {!!searchParams.get('dateMonth') &&
                 <Modal>
-                    <a className={'modal-close'} onClick={() => { return setModalOpen(false); }}><ModalClose /></a>
+                    <Link href={'/'} className={'modal-close'}><ModalClose/></Link>
                     {modalContent}
                 </Modal>
             }
