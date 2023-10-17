@@ -1,13 +1,12 @@
 'use client'
 
-import {ChangeEvent, useState} from 'react';
-// @ts-ignore
-import { experimental_useFormState as useFormState, experimental_useFormStatus as useFormStatus, Text } from 'react-dom'
-import { fetchMan } from '@/app/actions/area-man';
+import {ChangeEvent, FormEvent, FormEventHandler, useState} from 'react';
+import {useParams, useRouter} from "next/navigation";
+
+
 import LoadingSnake from "@/app/components/loading-snake";
 import Modal from '@/app/components/modal';
 import ModalClose from "@/app/components/modal-close";
-import {clsx} from "clsx";
 
 const initialFormState = {
     title: null,
@@ -16,10 +15,8 @@ const initialFormState = {
 };
 
 const SubmitButton = () => {
-    const {pending} = useFormStatus();
-    
     return (
-        <button className={clsx('rounded-md text-xl font-extrabold p-2 m-2 bg-white text-black leading-none', pending ?? 'disabled cursor-not-allowed')} type='submit' aria-disabled={pending}>&raquo;</button>
+        <button className={'rounded-md text-xl font-extrabold p-2 m-2 bg-white text-black leading-none'} type='submit'>&raquo;</button>
     )
 };
 
@@ -28,9 +25,11 @@ const SubmitButton = () => {
  *  it would need to be added.
  */
 export default function DateInput() {
-    const [amFormState, formAction] = useFormState(fetchMan, initialFormState);
     const [isModalOpen, setModalOpen] = useState(false);
 
+    const router = useRouter();
+    const params = useParams();
+    
     const [month, setMonth] = useState(''),
         [day, setDay] = useState('');
 
@@ -57,7 +56,7 @@ export default function DateInput() {
 
     const selectDayOptions = {
         className: 'rounded-md p-2 m-2',
-        id: 'dateMonth',
+        id: 'dateDay',
         onChange: (_e: ChangeEvent) => setDay((_e.target as HTMLSelectElement).value),
         name: 'dateDay',
         placeholder: 'Choose Day',
@@ -65,13 +64,23 @@ export default function DateInput() {
         value: day,
     };
     
-    const modalContentLoading = <div className={'flex flex-col h-1/2 w-full gap-2 justify-center align-middle'}><span>Loading!</span><LoadingSnake /></div>;
-
-    // Ew. Need a better way of checking for a loading state.    
-    const modalContent = amFormState?.date !== `${month}${day}` ? modalContentLoading : <><h1>{amFormState?.title}</h1><p className={'text-left whitespace-pre-wrap'}>{amFormState?.response}</p></>;
+    const formHandler = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        
+        const formData = new FormData(event.target as HTMLFormElement);
+        
+        setModalOpen(true);
+        void router.push(`/?${new URLSearchParams([...formData.entries()] as string[][]).toString()}`);
+    };
+    
+    console.log(params); // This isn't working.
+    
+    const modalContentLoading = <div className={'flex flex-col h-1/2 w-full gap-2 justify-center align-middle'}><span>Loading!</span><LoadingSnake /><br /><small>(ChatGPT takes ~30 seconds)</small></div>;
+    
+    const modalContent = null !== `${month}${day}` ? modalContentLoading : <><h1>{'f'}</h1><p className={'text-left whitespace-pre-wrap'}>{'f'}</p></>;
     
     return (
-        <form action={formAction} onSubmit={() => { setModalOpen(true); }}>
+        <form onSubmit={formHandler}>
             {isModalOpen &&
                 <Modal>
                     <a className={'modal-close'} onClick={() => { return setModalOpen(false); }}><ModalClose /></a>
