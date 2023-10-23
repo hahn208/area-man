@@ -90,6 +90,9 @@ export default function DateInput() {
             const chunkValue = decoder.decode(value);
             setStreamedContent((prev) => prev + chunkValue);
         }
+
+        // Reset the form behind the modal.
+        (event.target as HTMLFormElement).reset();
     };
     
     const modalContentLoading = <div className={'flex flex-col h-1/2 w-full gap-2 justify-center align-middle'}><span>Loading!</span><LoadingSnake /><br /></div>,

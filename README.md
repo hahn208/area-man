@@ -19,3 +19,4 @@ A small fun project to apply some ubiquitous packages. Area Man will accept a bi
 * Error checking
 * Introduce portal for the modal
 * Allow link sharing
+* Cancel stream when modal is closed
