@@ -5,6 +5,7 @@ A small fun project to apply some ubiquitous packages. Area Man will accept a bi
 ## Notes
 
 * Running NextJS 13 with Tailwind.
+* Streams content from ChatGPT using an edge function.
 
 ## Requirements
 
@@ -12,3 +13,9 @@ A small fun project to apply some ubiquitous packages. Area Man will accept a bi
 * OpenAI API key in `.env`
 * OpenAI Prompt in `.env`
 * For local development, save copy of `.env` to `.env.local`
+
+## TODO
+* Unit testing
+* Error checking
+* Introduce portal for the modal
+* Allow link sharing

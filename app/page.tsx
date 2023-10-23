@@ -1,5 +1,3 @@
-'use server'
-
 import Alert from "@/app/components/alert";
 import DateInput from "@/app/components/date-input";
 import ModalAbout from "@/app/components/modal-about";
