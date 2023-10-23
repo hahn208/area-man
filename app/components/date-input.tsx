@@ -95,15 +95,12 @@ export default function DateInput() {
         (event.target as HTMLFormElement).reset();
     };
     
-    const modalContentLoading = <div className={'flex flex-col h-1/2 w-full gap-2 justify-center align-middle'}><span>Loading!</span><LoadingSnake /><br /></div>,
-        modalContent = (!dateMonth) ? modalContentLoading : <><h1><span className={'first-letter:text-3xl'}>Area Man</span> on {dateMonth} {dateDay}--</h1><p className={'text-left whitespace-pre-wrap'}>{streamedContent}</p></>;
-    
     return (
         <form onSubmit={formHandler}>
             {!!dateMonth &&
                 <Modal>
                     <Link href={'/'} className={'modal-close'}><ModalClose/></Link>
-                    {modalContent}
+                    <><h1 className={'text-2xl md:text-3xl pb-2'}>Area Man on {dateMonth} {dateDay}--</h1><p className={'text-left whitespace-pre-wrap'}>{streamedContent}</p></>
                 </Modal>
             }
             <select {...selectMonthOptions}>
