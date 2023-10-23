@@ -1,45 +1,34 @@
 'use client'
 
-import {ChangeEvent, useState} from 'react';
-// @ts-ignore
-import { experimental_useFormState as useFormState, experimental_useFormStatus as useFormStatus, Text } from 'react-dom'
-import { fetchMan } from '@/app/actions/area-man';
+import { FormEvent, useState } from 'react';
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+
 import LoadingSnake from "@/app/components/loading-snake";
 import Modal from '@/app/components/modal';
 import ModalClose from "@/app/components/modal-close";
-import {clsx} from "clsx";
-
-const initialFormState = {
-    title: null,
-    response: null,
-    date: null,
-};
-
-const SubmitButton = () => {
-    const {pending} = useFormStatus();
-    
-    return (
-        <button className={clsx('rounded-md text-xl font-extrabold p-2 m-2 bg-white text-black leading-none', pending ?? 'disabled cursor-not-allowed')} type='submit' aria-disabled={pending}>&raquo;</button>
-    )
-};
 
 /**
  * Note: Not currently implementing a defaultValue for the selector since this is an SPA, but if a link is shared
  *  it would need to be added.
  */
 export default function DateInput() {
-    const [amFormState, formAction] = useFormState(fetchMan, initialFormState);
-    const [isModalOpen, setModalOpen] = useState(false);
-
-    const [month, setMonth] = useState(''),
-        [day, setDay] = useState('');
-
-    const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const router = useRouter();
     
+    // Use state to collect streamed content
+    const [streamedContent, setStreamedContent] = useState<String>("");
+
+    // Maintain input state via URL parameters.
+    const searchParams = useSearchParams(),
+        { dateMonth, dateDay } = Object.fromEntries(searchParams);
+
     // Convert a number into a zero-prefixed string. eg 1 => '01'.
     const leadingZero = (n: number) => (`0${n}`).slice(-2);
     
-    // Generate a collection of options for the select.
+    // Build the list of options for the form inputs.
+    const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    // Generate a collection of month options for the select.
     const monthOptions = monthList.map((name, k) => { return <option key={name} value={name}>{leadingZero(++k)} - {name}</option> });
     
     // Populate an array of options for the 1-31 selection.
@@ -48,33 +37,69 @@ export default function DateInput() {
     const selectMonthOptions = {
         className: 'rounded-md p-2 m-2',
         id: 'dateMonth',
-        onChange: (_e: ChangeEvent) => setMonth((_e.target as HTMLSelectElement).value),
         name: 'dateMonth',
         placeholder: 'Choose Month',
         required: true,
-        value: month,
+        defaultValue: dateMonth,
     };
 
     const selectDayOptions = {
         className: 'rounded-md p-2 m-2',
-        id: 'dateMonth',
-        onChange: (_e: ChangeEvent) => setDay((_e.target as HTMLSelectElement).value),
+        id: 'dateDay',
         name: 'dateDay',
         placeholder: 'Choose Day',
         required: true,
-        value: day,
+        defaultValue: dateDay,
     };
     
-    const modalContentLoading = <div className={'flex flex-col h-1/2 w-full gap-2 justify-center align-middle'}><span>Loading!</span><LoadingSnake /></div>;
+    const formHandler = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setStreamedContent("");
+        
+        // Build form data to generate URL params
+        const formData = new FormData(event.target as HTMLFormElement);
+        
+        // Push the form inputs to the URL.
+        void router.push(`/?${new URLSearchParams(formData as any)}`);
+        
+        // Request streaming response.
+        const response = await fetch(
+            "/area-man",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ dateMonth: formData.get('dateMonth'), dateDay: formData.get('dateDay') }),
+            }
+        );
 
-    // Ew. Need a better way of checking for a loading state.    
-    const modalContent = amFormState?.date !== `${month}${day}` ? modalContentLoading : <><h1>{amFormState?.title}</h1><p className={'text-left whitespace-pre-wrap'}>{amFormState?.response}</p></>;
+        if(!response.ok) throw new Error(response.statusText);
+
+        // This data is a ReadableStream
+        const data = response.body;
+        if (!data) {
+            return;
+        }
+
+        const reader = data.getReader();
+        const decoder = new TextDecoder();
+        let streamDone = false;
+
+        while (!streamDone) {
+            const { value, done: doneReading } = await reader.read();
+            streamDone = doneReading;
+            const chunkValue = decoder.decode(value);
+            setStreamedContent((prev) => prev + chunkValue);
+        }
+    };
+    
+    const modalContentLoading = <div className={'flex flex-col h-1/2 w-full gap-2 justify-center align-middle'}><span>Loading!</span><LoadingSnake /><br /></div>,
+        modalContent = (!dateMonth) ? modalContentLoading : <><h1><span className={'first-letter:text-3xl'}>Area Man</span> on {dateMonth} {dateDay}--</h1><p className={'text-left whitespace-pre-wrap'}>{streamedContent}</p></>;
     
     return (
-        <form action={formAction} onSubmit={() => { setModalOpen(true); }}>
-            {isModalOpen &&
+        <form onSubmit={formHandler}>
+            {!!dateMonth &&
                 <Modal>
-                    <a className={'modal-close'} onClick={() => { return setModalOpen(false); }}><ModalClose /></a>
+                    <Link href={'/'} className={'modal-close'}><ModalClose/></Link>
                     {modalContent}
                 </Modal>
             }
@@ -86,7 +111,7 @@ export default function DateInput() {
                 <option value="">&lt;Day&gt;</option>
                 {dayOptions}
             </select>
-            <SubmitButton></SubmitButton>
+            <button className={'rounded-md text-xl font-extrabold p-2 m-2 bg-white text-black leading-none'} type='submit'>&raquo;</button>
         </form>
     )
 };
