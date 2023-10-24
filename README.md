@@ -5,14 +5,12 @@ A small fun project to apply some ubiquitous packages. Area Man will accept a bi
 ## Notes
 
 * Running NextJS 13 with Tailwind.
-* Streams content from ChatGPT using an edge function.
+* Streams content from ChatGPT using an edge function. A guide to ChatGPT + Edge can be found on [the Vercel blog](https://vercel.com/blog/gpt-3-app-next-js-vercel-edge-functions).
 
 ## Requirements
 
 * Minimum Node v16.8
-* OpenAI API key in `.env`
-* OpenAI Prompt in `.env`
-* For local development, save copy of `.env` to `.env.local`
+* OpenAI API key and prompt in `.env`
 
 ## TODO
 * Unit testing
@@ -20,3 +18,10 @@ A small fun project to apply some ubiquitous packages. Area Man will accept a bi
 * Introduce portal for the modal
 * Allow link sharing
 * Cancel stream when modal is closed
+
+## Getting Started
+1. Clone the repo.
+2. `$ npm install`
+3. Copy `.env` to `.env.local` and enter the [OpenAI auth](https://platform.openai.com/account/api-keys) for local dev. Sorry, I'm not providing the AI prompt I used-- spin your own and put in `[DATE]` where you want string replacement to happen.
+4. `$ next dev` to get the localhost running.
+5. Visit `localhost:3000`.
