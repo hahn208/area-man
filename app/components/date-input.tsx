@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEvent, useState } from 'react';
+import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -8,13 +8,42 @@ import LoadingSnake from "@/app/components/loading-snake";
 import Modal from '@/app/components/modal';
 import ModalClose from "@/app/components/modal-close";
 
+const streamResponse = async (setContent: Dispatch<SetStateAction<String>>, dateMonth = "", dateDay = "") => {
+    // Request streaming response.
+    const response = await fetch(
+        "/area-man",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ dateMonth: dateMonth, dateDay: dateDay }),
+        }
+    );
+
+    if(!response.ok) throw new Error(response.statusText);
+
+    // This data is a ReadableStream
+    const data = response.body;
+    if (!data) {
+        return;
+    }
+
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+    let streamDone = false;
+
+    while (!streamDone) {
+        const { value, done: doneReading } = await reader.read();
+        streamDone = doneReading;
+        const chunkValue = decoder.decode(value);
+        setContent((prev) => prev + chunkValue);
+    }
+};
+
 /**
  * Note: Not currently implementing a defaultValue for the selector since this is an SPA, but if a link is shared
  *  it would need to be added.
  */
 export default function DateInput() {
-    const router = useRouter();
-    
     // Use state to collect streamed content
     const [streamedContent, setStreamedContent] = useState<String>("");
 
@@ -51,50 +80,26 @@ export default function DateInput() {
         required: true,
         defaultValue: dateDay,
     };
-    
+
     const formHandler = async (event: FormEvent<HTMLFormElement>) => {
+        const router = useRouter();
+
         event.preventDefault();
         setStreamedContent("");
-        
+
         // Build form data to generate URL params
         const formData = new FormData(event.target as HTMLFormElement);
-        
+
         // Push the form inputs to the URL.
         void router.push(`/?${new URLSearchParams(formData as any)}`);
         
-        // Request streaming response.
-        const response = await fetch(
-            "/area-man",
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ dateMonth: formData.get('dateMonth'), dateDay: formData.get('dateDay') }),
-            }
-        );
-
-        if(!response.ok) throw new Error(response.statusText);
-
-        // This data is a ReadableStream
-        const data = response.body;
-        if (!data) {
-            return;
-        }
-
-        const reader = data.getReader();
-        const decoder = new TextDecoder();
-        let streamDone = false;
-
-        while (!streamDone) {
-            const { value, done: doneReading } = await reader.read();
-            streamDone = doneReading;
-            const chunkValue = decoder.decode(value);
-            setStreamedContent((prev) => prev + chunkValue);
-        }
+        // Request the content stream from ChatGPT
+        await streamResponse(setStreamedContent, formData.get('dateMonth') as string, formData.get('dateDay') as string);
 
         // Reset the form behind the modal.
         (event.target as HTMLFormElement).reset();
     };
-    
+
     return (
         <form onSubmit={formHandler}>
             {!!dateMonth &&

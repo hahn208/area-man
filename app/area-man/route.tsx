@@ -1,6 +1,7 @@
-import { OpenAIStream, StreamingTextResponse } from 'ai';
+import { dateReplace } from "@/app/_utils/misc";
 import { NextRequest } from "next/server";
 import { OpenAI } from 'openai';
+import { OpenAIStream, StreamingTextResponse } from 'ai';
 
 // Create an OpenAI API client. Config defaults to process.env.OPENAI_API_KEY.
 const openai = new OpenAI();
@@ -17,7 +18,7 @@ export async function POST(request: NextRequest) {
             messages: [
                 {
                     role: 'user',
-                    content: process.env.OPENAI_PROMPT?.replace('[DATE]', `${dateMonth} ${dateDay}`) || "Please say 'Hello World' in 5 different languages.",
+                    content: dateReplace(process.env.OPENAI_PROMPT || '', dateMonth, dateDay) || "Please say 'Hello World' in 5 different languages.",
                 },
             ],
             model: 'gpt-3.5-turbo',
@@ -26,6 +27,8 @@ export async function POST(request: NextRequest) {
             temperature: 0.75 + (50*Math.random()|0)/100
         }
     );
+    
+    console.log(response);
 
     // Convert the response into a friendly text-stream
     const stream = OpenAIStream(response);
