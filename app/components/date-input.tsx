@@ -8,7 +8,7 @@ import LoadingSnake from "@/app/components/loading-snake";
 import Modal from '@/app/components/modal';
 import ModalClose from "@/app/components/modal-close";
 
-const streamResponse = async (setContent: Dispatch<SetStateAction<String>>, dateMonth = "", dateDay = "") => {
+export const streamResponse = async (setContent: Dispatch<SetStateAction<String>>, dateMonth = "", dateDay = "") => {
     // Request streaming response.
     const response = await fetch(
         "/area-man",
@@ -18,7 +18,7 @@ const streamResponse = async (setContent: Dispatch<SetStateAction<String>>, date
             body: JSON.stringify({ dateMonth: dateMonth, dateDay: dateDay }),
         }
     );
-
+    
     if(!response.ok) throw new Error(response.statusText);
 
     // This data is a ReadableStream
@@ -26,7 +26,7 @@ const streamResponse = async (setContent: Dispatch<SetStateAction<String>>, date
     if (!data) {
         return;
     }
-
+    
     const reader = data.getReader();
     const decoder = new TextDecoder();
     let streamDone = false;
@@ -34,6 +34,7 @@ const streamResponse = async (setContent: Dispatch<SetStateAction<String>>, date
     while (!streamDone) {
         const { value, done: doneReading } = await reader.read();
         streamDone = doneReading;
+
         const chunkValue = decoder.decode(value);
         setContent((prev) => prev + chunkValue);
     }
@@ -44,12 +45,14 @@ const streamResponse = async (setContent: Dispatch<SetStateAction<String>>, date
  *  it would need to be added.
  */
 export default function DateInput() {
+    const router = useRouter();
+
     // Use state to collect streamed content
     const [streamedContent, setStreamedContent] = useState<String>("");
 
     // Maintain input state via URL parameters.
-    const searchParams = useSearchParams(),
-        { dateMonth, dateDay } = Object.fromEntries(searchParams);
+    const searchParams = useSearchParams();
+    const { dateMonth, dateDay } = Object.fromEntries(searchParams.entries());
 
     // Convert a number into a zero-prefixed string. eg 1 => '01'.
     const leadingZero = (n: number) => (`0${n}`).slice(-2);
@@ -66,6 +69,7 @@ export default function DateInput() {
     const selectMonthOptions = {
         className: 'rounded-md p-2 m-2',
         id: 'dateMonth',
+        'data-testid': 'dateMonth',
         name: 'dateMonth',
         placeholder: 'Choose Month',
         required: true,
@@ -75,6 +79,7 @@ export default function DateInput() {
     const selectDayOptions = {
         className: 'rounded-md p-2 m-2',
         id: 'dateDay',
+        'data-testid': 'dateDay',
         name: 'dateDay',
         placeholder: 'Choose Day',
         required: true,
@@ -82,9 +87,9 @@ export default function DateInput() {
     };
 
     const formHandler = async (event: FormEvent<HTMLFormElement>) => {
-        const router = useRouter();
-
         event.preventDefault();
+
+        // Reset the content for any re-runs of the app
         setStreamedContent("");
 
         // Build form data to generate URL params
@@ -95,7 +100,7 @@ export default function DateInput() {
         
         // Request the content stream from ChatGPT
         await streamResponse(setStreamedContent, formData.get('dateMonth') as string, formData.get('dateDay') as string);
-
+        
         // Reset the form behind the modal.
         (event.target as HTMLFormElement).reset();
     };
@@ -105,7 +110,7 @@ export default function DateInput() {
             {!!dateMonth &&
                 <Modal>
                     <Link href={'/'} className={'modal-close'}><ModalClose/></Link>
-                    <><h1 className={'text-2xl md:text-3xl pb-2'}>Area Man on {dateMonth} {dateDay}--</h1><p className={'text-left whitespace-pre-wrap'}>{streamedContent}</p></>
+                    <><h1 data-testid={'modalHeading'} className={'text-2xl md:text-3xl pb-2'}>Area Man on {dateMonth} {dateDay}--</h1><p data-testid={'modalContent'} className={'text-left whitespace-pre-wrap'}>{streamedContent}</p></>
                 </Modal>
             }
             <select {...selectMonthOptions}>
@@ -116,7 +121,7 @@ export default function DateInput() {
                 <option value="">&lt;Day&gt;</option>
                 {dayOptions}
             </select>
-            <button className={'rounded-md text-xl font-extrabold p-2 m-2 bg-white text-black leading-none'} type='submit'>&raquo;</button>
+            <button data-testid={'dateInputSubmit'} className={'rounded-md text-xl font-extrabold p-2 m-2 bg-white text-black leading-none'} type='submit'>&raquo;</button>
         </form>
     )
 };

@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { describe } from "node:test";
 import Link from "next/link";
 import Modal from '../app/components/modal';
 import ModalAbout from "../app/components/modal-about";
