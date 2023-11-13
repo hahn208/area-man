@@ -26,16 +26,23 @@
         }
 
         #theme-toggle .theme-toggle--light {
-            display: block;
+            @apply block
         }
     }
 
     @media (prefers-color-scheme: light) {
         #theme-toggle .theme-toggle--dark {
-            display: block;
+            @apply block
+        }
+        
+        .invert-color {
+            filter: invert();
+        }
+        
+        [data-color-scheme='dark'] .invert-color {
+            filter: none;
         }
     }
-
 
     body {
         color: rgb(var(--foreground-rgb));
@@ -47,20 +54,25 @@
     }
 
     h1 {
-        font-size: 2rem;
+        @apply text-4xl;
     }
 
     h2 {
-        line-height: 1.8rem;
+        @apply text-lg;
     }
 
     a {
-        text-decoration: underline;
+        @apply underline;
         text-underline-offset: 2px;
+    }
+    
+    a:hover {
+        @apply no-underline;
     }
 
     select, select > option {
-        color: black
+        @apply text-black;
+        @apply cursor-pointer;
     }
 }
 
@@ -108,6 +120,10 @@
     offset-path: path('M 30,10 C 60,10 60,70 30,70 M 30,70');
     offset-rotate: 0deg;
     display: block;
+}
+
+[data-color-scheme='light'] .invert-color {
+    filter: invert();
 }
 
 .modal h1 {

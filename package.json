@@ -18,6 +18,7 @@
     "clsx": "^2.0.0",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.13",
+    "gm": "^1.25.0",
     "next": "latest",
     "openai": "4.11.0",
     "postcss": "8.4.27",
@@ -30,6 +31,7 @@
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.0.0",
     "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0"
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^22.1.0"
   }
 }
