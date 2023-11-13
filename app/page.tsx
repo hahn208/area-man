@@ -7,7 +7,7 @@ interface searchParams {
     [key: string]: string | string[] | undefined
 }
 
-export default function Page({searchParams}: {searchParams: searchParams}) {
+export default async function Page({searchParams}: {searchParams: searchParams}) {
     return (
         <>
             <main className="flex flex-col items-center text-center pb-40">
