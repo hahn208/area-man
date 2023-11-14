@@ -3,22 +3,25 @@ import DateInput from "@/app/components/date-input";
 import ModalAbout from "@/app/components/modal-about";
 import ModalTerms from "@/app/components/modal-terms";
 
-interface searchParams {
-    [key: string]: string | string[] | undefined
-}
-
-export default async function Page({searchParams}: {searchParams: searchParams}) {
+export default async function Page(props = { searchParams: { modal: '' }}) {
+    const {searchParams} = Object.assign(
+        {
+            searchParams: { modal: '' }
+        },
+        props
+    );
+    
     return (
         <>
             <main className="flex flex-col items-center text-center pb-40">
-                <h1>Area Man</h1>
+                <h1 data-testid={'page-heading'}>Area Man</h1>
                 { !process.env.OPENAI_PROMPT &&
                     <Alert>OPENAI_PROMPT not set in .env</Alert>
                 }
                 { !process.env.OPENAI_API_KEY &&
                     <Alert>OPENAI_API_KEY not set in .env</Alert>
                 }
-                <h2>Enter your birthday and prepare to be <br/><strong className={'tracking-widest uppercase'}>amazed</strong></h2>
+                <h2>Enter your birthday and prepare to be <br/><strong className={'tracking-widest uppercase'}>baffled</strong></h2>
                 <section className={'p-4'}>
                     <DateInput></DateInput>
                 </section>

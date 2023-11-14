@@ -4,7 +4,7 @@ import '../loading-snake.css';
 
 export default function LoadingSnake() {
     return(
-        <div className="loadingSnake">
+        <div className="loadingSnake" data-testid={'loadingSnake'} aria-hidden={true}>
             <div className="dot-row-t dot-one"></div>
             <div className="dot-row-t dot-two"></div>
             <div className="dot-row-r dot-one"></div>

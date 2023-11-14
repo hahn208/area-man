@@ -1,20 +1,19 @@
 'use client'
 
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-
-import LoadingSnake from "@/app/components/loading-snake";
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import LoadingSnake from '@/app/components/loading-snake';
 import Modal from '@/app/components/modal';
-import ModalClose from "@/app/components/modal-close";
+import ModalClose from '@/app/components/modal-close';
 
-export const streamResponse = async (setContent: Dispatch<SetStateAction<String>>, dateMonth = "", dateDay = "") => {
+export const streamResponse = async (setContent: Dispatch<SetStateAction<String>>, dateMonth = '', dateDay = '') => {
     // Request streaming response.
     const response = await fetch(
-        "/area-man",
+        '/area-man',
         {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ dateMonth: dateMonth, dateDay: dateDay }),
         }
     );
@@ -48,7 +47,7 @@ export default function DateInput() {
     const router = useRouter();
 
     // Use state to collect streamed content
-    const [streamedContent, setStreamedContent] = useState<String>("");
+    const [streamedContent, setStreamedContent] = useState<String>('');
 
     // Maintain input state via URL parameters.
     const searchParams = useSearchParams();
@@ -110,7 +109,7 @@ export default function DateInput() {
             {!!dateMonth &&
                 <Modal>
                     <Link href={'/'} className={'modal-close'}><ModalClose/></Link>
-                    <><h1 data-testid={'modalHeading'} className={'text-2xl md:text-3xl pb-2'}>Area Man on {dateMonth} {dateDay}--</h1><p data-testid={'modalContent'} className={'text-left whitespace-pre-wrap'}>{streamedContent}</p></>
+                    <><h1 data-testid={'modalHeading'} className={'text-2xl md:text-3xl pb-2'}>Area Man on {dateMonth} {dateDay}--</h1>{streamedContent ? <p data-testid={'modalContent'} className={'text-left whitespace-pre-wrap'}>{streamedContent}</p> : <LoadingSnake></LoadingSnake>}</>
                 </Modal>
             }
             <label htmlFor={selectMonthOptions.id} className={'sr-only'}>Choose Month</label>
