@@ -21,7 +21,7 @@ jest.mock('next/navigation', () => {
 
 describe('Page', () => {
     it('should render', async () => {
-        const _page = render(await Page());
+        const _page = render(await Page({ searchParams: { modal: '' } }));
 
         const heading = screen.getByTestId('page-heading');
 
