@@ -28,3 +28,7 @@ A small fun project to apply some ubiquitous packages. Area Man will accept a bi
 ## Test Coverage
 
 ![coverage_2023-11-14.png](__tests__%2Fcoverage_2023-11-14.png)
+
+## Lighthouse (Vercel production)
+
+![lighthouse_2023-11-14.png](__tests__%2Flighthouse_2023-11-14.png)
