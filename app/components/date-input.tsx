@@ -113,10 +113,12 @@ export default function DateInput() {
                     <><h1 data-testid={'modalHeading'} className={'text-2xl md:text-3xl pb-2'}>Area Man on {dateMonth} {dateDay}--</h1><p data-testid={'modalContent'} className={'text-left whitespace-pre-wrap'}>{streamedContent}</p></>
                 </Modal>
             }
+            <label htmlFor={selectMonthOptions.id} className={'sr-only'}>Choose Month</label>
             <select {...selectMonthOptions}>
                 <option value="">&lt;Month&gt;</option>
                 {monthOptions}
             </select>
+            <label htmlFor={selectDayOptions.id} className={'sr-only'}>Choose Day</label>
             <select {...selectDayOptions}>
                 <option value="">&lt;Day&gt;</option>
                 {dayOptions}

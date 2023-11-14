@@ -13,7 +13,6 @@ A small fun project to apply some ubiquitous packages. Area Man will accept a bi
 * OpenAI API key and prompt in `.env`
 
 ## TODO
-* Unit testing
 * Error checking
 * Introduce portal for the modal
 * Allow link sharing
@@ -23,5 +22,5 @@ A small fun project to apply some ubiquitous packages. Area Man will accept a bi
 1. Clone the repo.
 2. `$ npm install`
 3. Copy `.env` to `.env.local` and enter the [OpenAI auth](https://platform.openai.com/account/api-keys) for local dev. Sorry, I'm not providing the AI prompt I used-- spin your own and put in `[DATE]` where you want string replacement to happen.
-4. `$ next dev` to get the localhost running.
+4. `$ next dev` or `$ npm run dev` to get the localhost running.
 5. Visit `localhost:3000`.
