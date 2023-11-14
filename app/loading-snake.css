@@ -6,6 +6,7 @@
     overflow: hidden;
     justify-self: center;
     align-self: center;
+    margin: 10vh auto;
 }
 
 .loadingSnake > div {
@@ -14,22 +15,22 @@
     width: 5px;
     height: 5px;
     background-color: #000;
-    animation-duration: 1s;
+    animation-duration: 0.6s;
     animation-iteration-count: infinite;
     animation-timing-function: steps(1, end);
 }
 
 .dot-two {
-    opacity: 0.3;
+    opacity: 0.33;
 }
 
 .loadingSnake > .dot-row-t {
     animation-name: dot-march-t;
-    left: 0;
+    left: 5px;
 }
 
 .loadingSnake .dot-row-t.dot-two {
-    left: -5px;
+    left: 0px;
 }
 
 .loadingSnake > .dot-row-r {
@@ -44,12 +45,12 @@
 
 .loadingSnake > .dot-row-b {
     animation-name: dot-march-b;
-    right: 0;
+    right: 5px;
     bottom: 0;
 }
 
 .loadingSnake .dot-row-b.dot-two {
-    right: -5px;
+    right: 0px;
 }
 
 .loadingSnake > .dot-row-l {

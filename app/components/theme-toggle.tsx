@@ -6,6 +6,7 @@ export default function ThemeToggle()
 {
     const setScheme = (shade: string) => {
         document.body.setAttribute(`data-color-scheme`, '');
+        // A quick timeout is required to re-initiate the animation-- otherwise it only works once.
         global.setTimeout(() => { document.body.setAttribute(`data-color-scheme`, shade); }, 1);
     };
 

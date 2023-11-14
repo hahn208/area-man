@@ -7,6 +7,9 @@ import DateInput from "../app/components/date-input";
 import { TextEncoder, TextDecoder } from 'util';
 Object.assign(global, { TextDecoder, TextEncoder });
 
+/**
+ * Mock the fetch to our endpoint that returns a streamed response from ChatGPT
+ */
 global.fetch = jest.fn(
     (url, data) => {
         const { dateMonth, dateDay } = JSON.parse(data.body);
