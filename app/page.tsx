@@ -3,14 +3,11 @@ import DateInput from "@/app/components/date-input";
 import ModalAbout from "@/app/components/modal-about";
 import ModalTerms from "@/app/components/modal-terms";
 
-export default async function Page(props = { searchParams: { modal: '' }}) {
-    const {searchParams} = Object.assign(
-        {
-            searchParams: { modal: '' }
-        },
-        props
-    );
-    
+interface searchParams {
+    [key: string]: string | string[] | undefined
+}
+
+export default function Page({searchParams}: {searchParams: searchParams}) {
     return (
         <>
             <main className="flex flex-col items-center text-center pb-40">
