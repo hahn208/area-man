@@ -8,34 +8,42 @@ import Modal from '@/app/components/modal';
 import ModalClose from '@/app/components/modal-close';
 
 export const streamResponse = async (setContent: Dispatch<SetStateAction<String>>, dateMonth = '', dateDay = '') => {
-    // Request streaming response.
-    const response = await fetch(
-        '/area-man',
-        {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ dateMonth: dateMonth, dateDay: dateDay }),
+    const ERR_TEXT = 'Ah rhatz you broke it. What likely happened is my serf-level OpenAI account has hit the daily ceiling. Sry. Please try again tomorrow.';
+    
+    try {
+        // Request streaming response.
+        const response = await fetch(
+            '/area-man',
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ dateMonth: dateMonth, dateDay: dateDay }),
+            }
+        );
+        
+        if(!response.ok) throw new Error(response.statusText);
+    
+        // This data is a ReadableStream
+        const data = response.body;
+        if (!data) {
+            return;
         }
-    );
+        
+        const reader = data.getReader();
+        const decoder = new TextDecoder();
+        let streamDone = false;
     
-    if(!response.ok) throw new Error(response.statusText);
-
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
-        return;
+        while (!streamDone) {
+            const { value, done: doneReading } = await reader.read();
+            streamDone = doneReading;
+    
+            const chunkValue = decoder.decode(value);
+            setContent((prev) => prev + chunkValue);
+        }
     }
-    
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let streamDone = false;
-
-    while (!streamDone) {
-        const { value, done: doneReading } = await reader.read();
-        streamDone = doneReading;
-
-        const chunkValue = decoder.decode(value);
-        setContent((prev) => prev + chunkValue);
+    catch(e: any)
+    {
+        setContent(ERR_TEXT);
     }
 };
 
