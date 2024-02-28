@@ -8,7 +8,7 @@ import Modal from '@/app/components/modal';
 import ModalClose from '@/app/components/modal-close';
 
 export const streamResponse = async (setContent: Dispatch<SetStateAction<String>>, dateMonth = '', dateDay = '') => {
-    const ERR_TEXT = 'Ah rhatz you broke it. What likely happened is my serf-level OpenAI account has hit the daily ceiling. Sry. Please try again tomorrow.';
+    const ERR_TEXT = 'Ah rhatz you broke it. What likely happened is my serf-level OpenAI account has run out of funds. Good news though, I\'m available for hire! Find me at linkedin.com/in/208hahn';
     
     try {
         // Request streaming response.
