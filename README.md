@@ -2,9 +2,11 @@
 
 A small fun project to apply some ubiquitous packages. Area Man will accept a birthday and return the results of whatever "area man" nonsense coincides with it. There is no data-harvesting with this.
 
+![static-resp.png](public%2Fstatic-resp.png)
+
 ## Notes
 
-* Running NextJS 13 with Tailwind.
+* Running Next.js 14 with Tailwind.
 * Streams content from ChatGPT using an edge function. A guide to ChatGPT + Edge can be found on [the Vercel blog](https://vercel.com/blog/gpt-3-app-next-js-vercel-edge-functions).
 
 ## Requirements
