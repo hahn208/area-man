@@ -5,6 +5,7 @@ import Header from '@/app/components/header'
 import Footer from '@/app/components/footer'
 import { ReactNode } from 'react';
 import { clsx } from 'clsx';
+import { Analytics } from "@vercel/analytics/react"
 
 const layoutFont = Josefin_Sans({ weight: ['400', '700'], subsets: ['latin'] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <Header></Header>
             { children }
             <Footer></Footer>
+            <Analytics></Analytics>
         </body>
       </html>
   )
