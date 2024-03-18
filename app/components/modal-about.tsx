@@ -7,9 +7,10 @@ export default function ModalAbout() {
         <Modal>
             <Link href={'/'} className={'modal-close'}><ModalClose/></Link>
             <h1>About</h1>
-            <h2>Created by <Link href={'https://github.com/hahn208/'} target={'_blank'}>Andrew Hahn</Link>.</h2>
-            <p>This project is an exercise of NextJS, Tailwind, and ChatGPT. AI will never have the entropy of AREA MAN,
-                but this app is just to entertain, not throw shade.</p>
+            <h2>Created by <Link href={'https://www.linkedin.com/in/208hahn'} target={'_blank'}>Andrew Hahn</Link>.</h2>
+            <br />
+            <p>This project is an exercise of NextJS, Tailwind, and ChatGPT. It leverages <a
+                href={'https://vercel.com/docs/functions'} target={'_blank'}>edge functions</a> to stream the OpenAI response. LLMs will never have the entropy of AREA MAN, but this app is just for fun.</p>
         </Modal>
     );
 }
