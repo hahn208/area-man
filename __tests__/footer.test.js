@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import Footer from '@/app/components/footer';
 
@@ -11,6 +11,6 @@ describe('Footer', () => {
 
             const aboutLink = screen.getByText('About');
             expect(aboutLink).toBeInTheDocument();
-        })
+        });
     });
 });

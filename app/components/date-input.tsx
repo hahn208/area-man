@@ -68,10 +68,10 @@ export default function DateInput() {
     const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     
     // Generate a collection of month options for the select.
-    const monthOptions = monthList.map((name, k) => { return <option key={name} value={name}>{leadingZero(++k)} - {name}</option> });
+    const monthOptions = monthList.map((name, k) => { return <option key={name} value={name}>{leadingZero(++k)} - {name}</option>; });
     
     // Populate an array of options for the 1-31 selection.
-    const dayOptions = [...Array(31).keys()].map((_n) => { return <option key={_n} value={++_n}>{leadingZero(_n)}</option> });
+    const dayOptions = [...Array(31).keys()].map((_n) => { return <option key={_n} value={++_n}>{leadingZero(_n)}</option>; });
     
     const selectMonthOptions = {
         className: 'rounded-md p-2 m-2',
@@ -132,5 +132,5 @@ export default function DateInput() {
             </select>
             <button data-testid={'dateInputSubmit'} className={'rounded-md text-xl font-extrabold p-2 m-2 bg-white text-black leading-none'} type='submit'>&raquo;</button>
         </form>
-    )
+    );
 };

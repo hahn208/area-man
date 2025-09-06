@@ -1,3 +1,9 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "semi": "error",
+    "prefer-const": "error",
+    "prefer-object-has-own": "error",
+    "no-prototype-builtins": "warn"
+  }
 }
