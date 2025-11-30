@@ -6,7 +6,7 @@ export const constructStream = async (dateMonth: string, dateDay: string) => {
     // Create an OpenAI API client. Config defaults to process.env.OPENAI_API_KEY.
     const openai = new OpenAI();
     
-    let message = [
+    const message = [
         {
             content: 'You are a journalist tasked with reporting jaw-dropping stories.',
             role: 'system',
