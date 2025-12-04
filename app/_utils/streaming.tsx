@@ -37,16 +37,22 @@ export const constructStream = async (dateMonth: string, dateDay: string) => {
     );
 
     // Ask OpenAI for a streaming completion given the prompt
-    const response = await openai.chat.completions.create(
-        {
-            // @ts-ignore
-            messages: message,
-            model: 'gpt-3.5-turbo',
-            stream: true,
-            /* Set a temperate range of 0.75 - 1.25 for varied levels of responses-- random seed truncated to two decimals */
-            temperature: 0.75 + (50*Math.random()|0)/100
-        }
-    );
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify(
+            {
+                messages: message,
+                model: 'gpt-3.5-turbo',
+                stream: true,
+                /* Set a temperate range of 0.75 - 1.25 for varied levels of responses-- random seed truncated to two decimals */
+                temperature: 0.75 + (50 * Math.random() | 0) / 100
+            }
+        )
+    });
 
     // Convert the response into a friendly text-stream
     const stream = OpenAIStream(response);
